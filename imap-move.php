@@ -343,13 +343,14 @@ function _args($argc,$argv)
 */
 function _path_map($x)
 {
+    // zmiana dla cPanel @author JP
     if (preg_match('/}(.+)$/',$x,$m)) {
         switch (strtolower($m[1])) {
         // case 'inbox':         return null;
-        case 'deleted items': return '[Gmail]/Trash';
-        case 'drafts':        return '[Gmail]/Drafts';
-        case 'junk e-mail':   return '[Gmail]/Spam';
-        case 'sent items':    return '[Gmail]/Sent Mail';
+        case 'trash': return 'INBOX.Junk';
+        case 'drafts':        return 'INBOX.Drafts';
+        case 'spam':   return 'INBOX.spam';
+        case 'sent':    return 'INBOX.Sent';
         }
         $x = str_replace('INBOX/',null,$m[1]);
     }
