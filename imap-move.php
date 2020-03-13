@@ -94,7 +94,7 @@ foreach ($src_path_list as $path) {
         if (empty($stat['subject'])) $stat['subject'] = "[ No Subject ] Message $src_idx";
         // print_r($stat['message_id']); exit;
 
-        if (array_key_exists($stat['message_id'],$tgt_mail_list)) {
+        if (isset($stat['message_id']) && array_key_exists($stat['message_id'],$tgt_mail_list)) {
             echo "S:$src_idx Mail: {$stat['subject']} Copied Already\n";
             $S->mailWipe($i);
             continue;
