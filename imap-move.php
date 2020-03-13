@@ -317,6 +317,10 @@ function _args($argc,$argv)
             break;
         case '--copy':
             // Given a Path to Copy To?
+            if (!isset($argv[$i+1]))
+            {
+                $argv[$i+1] = 'tmp';
+            }
             $chk = $argv[$i+1];
             if (substr($chk,0,1)!='-') {
                 $_ENV['copy_path'] = $chk;
