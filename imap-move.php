@@ -51,7 +51,12 @@ foreach ($src_path_list as $path) {
     }
 
     // Source Path
-    $S->setPath($path['name']);
+    if (!$S->setPath($path['name']))
+    {
+        echo "ERROR, skipping!";
+        continue;
+    }
+
     $src_path_stat = $S->pathStat();
     // print_r($src_path_stat);
     if (empty($src_path_stat['mail_count'])) {
@@ -63,7 +68,11 @@ foreach ($src_path_list as $path) {
     // Target Path
     $tgt_path = _path_map($path['name']);
     echo "T: Indexing: $tgt_path\n";
-    $T->setPath($tgt_path); // Creates if needed
+    if (!$T->setPath($tgt_path))
+    {
+        echo "ERROR creating path, skipping!";
+        continue;// Creates if needed
+    }
     // Show info on Target
     $tgt_path_stat = $T->pathStat();
     echo "T: {$tgt_path_stat['mail_count']} messages\n";
@@ -240,7 +249,7 @@ class IMAP
         }
 
         $buf = implode(', ',$buf);
-        if (preg_match('/NONEXISTENT/',$buf)) {
+        if (preg_match('/NONEXISTENT/',$buf) || preg_match('/doesn\'t exist/',$buf)) {
             // Likley Couldn't Open on Gmail Side, So Create
             $ret = imap_createmailbox($this->_c,$p);
             $buf = imap_errors();
@@ -249,9 +258,11 @@ class IMAP
                 imap_reopen($this->_c,$p);
                 return true;
             }
-            die(print_r($buf,true)."\nFailed to Create setPath($p)\n");
+            return false;
+            //die(print_r($buf,true)."\nFailed to Create setPath($p)\n");
         }
-        die(print_r($buf,true)."\nFailed to Switch setPath($p)\n");
+        return false;
+        //die(print_r($buf,true)."\nFailed to Switch setPath($p)\n");
     }
 
     /**
