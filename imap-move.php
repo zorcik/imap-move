@@ -25,6 +25,7 @@ Run Like:
 */
 
 error_reporting(E_ALL | E_STRICT);
+set_time_limit(0);
 
 _args($argc,$argv);
 
